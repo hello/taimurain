@@ -16,6 +16,10 @@
         <aws.sdk.version>1.10.34</aws.sdk.version>
         <librato.reporter.version>2.2.0.5</librato.reporter.version>
         <dagger.version>1.2.2</dagger.version>
+        <nd4j.version>0.4-rc3.8</nd4j.version>
+        <dl4j.version>0.4-rc3.8</dl4j.version>
+        <dl4j-local.version>0.4-rc3.9</dl4j-local.version>
+        <canova.version>0.0.0.13</canova.version>
     </properties>
 
     <distributionManagement>
@@ -264,6 +268,45 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+
+        <!--- deep learning for Java crap -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j-local.version}</version>
+            <!--<scope>system</scope>
+            <systemPath>${project.basedir}/repo/org/deeplearning4j/deeplearning4j-core/0.4-rc3.8/deeplearning4j-core-0.4-rc3.8.jar</systemPath>
+            -->
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-x86</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>canova-nd4j-image</artifactId>
+            <groupId>org.nd4j</groupId>
+            <version>${canova.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>canova-nd4j-codec</artifactId>
+            <groupId>org.nd4j</groupId>
+            <version>${canova.version}</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <extensions>
