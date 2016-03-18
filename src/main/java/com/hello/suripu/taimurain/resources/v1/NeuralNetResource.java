@@ -63,7 +63,7 @@ public class NeuralNetResource  {
 
     @POST
     @Consumes(AdditionalMediaTypes.APPLICATION_PROTOBUF)
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces(AdditionalMediaTypes.APPLICATION_PROTOBUF)
     @Path("/evaluate")
     public byte[] evaluateNet(final byte[] body) {
         try {
