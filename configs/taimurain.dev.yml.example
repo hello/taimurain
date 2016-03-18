@@ -121,3 +121,9 @@ dynamodb:
       teams : http://localhost:7777
       calibration: http://localhost:7777
       sense_state: http://localhost:7777
+
+
+
+neural_net_config:
+  bucket: hello-timeline-models
+  key: net.config

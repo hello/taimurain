@@ -121,3 +121,7 @@ dynamodb:
       teams : http://dynamodb.us-east-1.amazonaws.com
       calibration : http://dynamodb.us-east-1.amazonaws.com
       sense_state: http://dynamodb.us-east-1.amazonaws.com
+
+neural_net_config:
+  bucket: hello-timeline-models
+  key: net.config

@@ -2,6 +2,7 @@ package com.hello.suripu.taimurain.resources.v1;
 
 import com.hello.dropwizard.mikkusu.helpers.AdditionalMediaTypes;
 import com.hello.suripu.core.resources.BaseResource;
+import com.hello.suripu.taimurain.db.NeuralNetDAO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,6 +19,13 @@ import java.util.List;
 
 @Path("/v1/neuralnet")
 public class NeuralNetResource extends BaseResource  {
+
+    private final NeuralNetDAO neuralNetDAO;
+
+    public NeuralNetResource(final NeuralNetDAO neuralNetDAO) {
+        this.neuralNetDAO = neuralNetDAO;
+    }
+
     @POST
     @Consumes(AdditionalMediaTypes.APPLICATION_PROTOBUF)
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -32,6 +40,6 @@ public class NeuralNetResource extends BaseResource  {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getavailable")
     List<String> getAvailableNeuralNets() {
-        return Collections.EMPTY_LIST;
+        return neuralNetDAO.getAvailableIds();
     }
 }

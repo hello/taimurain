@@ -1,7 +1,10 @@
 package com.hello.suripu.taimurain;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.common.collect.ImmutableMap;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.graphite.Graphite;
@@ -12,6 +15,8 @@ import com.hello.suripu.core.db.util.JodaArgumentFactory;
 import com.hello.suripu.core.db.util.PostgresIntegerArrayArgumentFactory;
 import com.hello.suripu.taimurain.cli.CreateDynamoDBTables;
 import com.hello.suripu.taimurain.configuration.TaimurainConfiguration;
+import com.hello.suripu.taimurain.db.NeuralNetDAO;
+import com.hello.suripu.taimurain.db.NeuralNetsFromS3;
 import org.joda.time.DateTimeZone;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
@@ -61,6 +66,12 @@ public class Taimurain extends Application<TaimurainConfiguration> {
         // Checks Environment first and then instance profile.
         final AWSCredentialsProvider awsCredentialsProvider = new DefaultAWSCredentialsProviderChain();
 
+        final ClientConfiguration clientConfiguration = new ClientConfiguration();
+        clientConfiguration.withConnectionTimeout(200); // in ms
+        clientConfiguration.withMaxErrorRetry(1);
+
+
+        final AmazonS3 amazonS3 = new AmazonS3Client(awsCredentialsProvider, clientConfiguration);
 
         if(configuration.getMetricsEnabled()) {
           final String graphiteHostName = configuration.getGraphite().getHost();
@@ -84,6 +95,12 @@ public class Taimurain extends Application<TaimurainConfiguration> {
         } else {
           LOGGER.warn("Metrics not enabled.");
         }
+
+
+
+          /* Neural net data DAOs */
+        final NeuralNetDAO neuralNetDAO = NeuralNetsFromS3.createFromConfigBucket(amazonS3,configuration.getNeuralNetConfiguration().getBucket(),configuration.getNeuralNetConfiguration().getKey());
+
 
 
     }

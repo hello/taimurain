@@ -3,6 +3,7 @@ package com.hello.suripu.taimurain.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hello.suripu.coredw8.configuration.GraphiteConfiguration;
 import com.hello.suripu.core.configuration.NewDynamoDBConfiguration;
+import com.hello.suripu.coredw8.configuration.S3BucketConfiguration;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
@@ -49,5 +50,11 @@ public class TaimurainConfiguration extends Configuration {
     public NewDynamoDBConfiguration dynamoDBConfiguration(){
         return dynamoDBConfiguration;
     }
+
+    @Valid
+    @NotNull
+    @JsonProperty("neural_net_config")
+    private S3BucketConfiguration neuralNetConfiguration;
+    public S3BucketConfiguration getNeuralNetConfiguration() { return neuralNetConfiguration; }
 
 }
