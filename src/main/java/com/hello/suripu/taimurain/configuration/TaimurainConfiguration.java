@@ -3,6 +3,7 @@ package com.hello.suripu.taimurain.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hello.suripu.coredw8.configuration.GraphiteConfiguration;
 import com.hello.suripu.core.configuration.NewDynamoDBConfiguration;
+import com.hello.suripu.coredw8.configuration.S3BucketConfiguration;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
@@ -11,13 +12,7 @@ import javax.validation.constraints.NotNull;
 
 public class TaimurainConfiguration extends Configuration {
 
-    @Valid
-    @NotNull
-    @JsonProperty("common_db")
-    private DataSourceFactory commonDB = new DataSourceFactory();
-    public DataSourceFactory getCommonDB() {
-        return commonDB;
-    }
+
 
     @Valid
     @NotNull
@@ -42,12 +37,11 @@ public class TaimurainConfiguration extends Configuration {
         return graphite;
     }
 
+
     @Valid
     @NotNull
-    @JsonProperty("dynamodb")
-    private NewDynamoDBConfiguration dynamoDBConfiguration;
-    public NewDynamoDBConfiguration dynamoDBConfiguration(){
-        return dynamoDBConfiguration;
-    }
+    @JsonProperty("neural_net_config")
+    private S3BucketConfiguration neuralNetConfiguration;
+    public S3BucketConfiguration getNeuralNetConfiguration() { return neuralNetConfiguration; }
 
 }

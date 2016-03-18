@@ -10,45 +10,6 @@ graphite:
     - xx-responses
     - com.hello
 
-common_db:
-  # the name of your JDBC driver
-  driverClass: org.postgresql.Driver
-
-  # the username
-  user: your postgresql username
-
-  # the password
-  password: your postgresql password
-
-  # the JDBC URL
-  url: jdbc:postgresql://localhost:5432/[your postgresql username]
-
-  # any properties specific to your JDBC driver:
-  properties:
-    charSet: UTF-8
-
-  # the maximum amount of time to wait on an empty pool before throwing an exception
-  maxWaitForConnection: 1s
-
-  # the SQL query to run when validating a connection's liveness
-  validationQuery: "/* MyService Health Check */ SELECT 1"
-
-  initialSize: 2
-
-  # the minimum number of connections to keep open
-  minSize: 2
-
-  # the maximum number of connections to keep open
-  maxSize: 8
-
-  # whether or not idle connections should be validated
-  checkConnectionWhileIdle: false
-
-  # the amount of time to sleep between runs of the idle connection validation, abandoned cleaner and idle pool resizing
-  evictionInterval: 10s
-
-  # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
-  minIdleTime: 1 minute
 
 server:
   adminMinThreads: 1
@@ -92,32 +53,7 @@ logging:
 #      # facility: USER
 #      # sendLocalName: true
 
-dynamodb:
-  region: us-east-1
-  tables:
-    alarm_info : alarm_info
-    features : features
-    firmware_upgrade_path : fw_upgrade_path
-    firmware_versions : firmware_versions_mapping
-    ota_history : ota_history
-    pill_key_store : pill_key_store
-    ring_time_history: ring_time_history_by_account
-    sense_key_store : key_store
-    sync_response_commands : response_commands
-    teams : teams
-    calibration: calibration
-    sense_state: sense_state
 
-  endpoints:
-      alarm_info : http://localhost:7777
-      features : http://localhost:7777
-      firmware_upgrade_path : http://localhost:7777
-      firmware_versions : http://localhost:7777
-      ota_history : http://localhost:7777
-      pill_key_store : http://localhost:7777
-      ring_time_history: http://localhost:7777
-      sense_key_store : http://localhost:7777
-      sync_response_commands : http://localhost:7777
-      teams : http://localhost:7777
-      calibration: http://localhost:7777
-      sense_state: http://localhost:7777
+neural_net_config:
+  bucket: hello-timeline-models
+  key: net.config
