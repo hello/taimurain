@@ -5,20 +5,14 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.google.common.collect.ImmutableMap;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
-import com.hello.suripu.core.configuration.DynamoDBTableName;
-import com.hello.suripu.core.db.DeviceDAO;
-import com.hello.suripu.core.db.util.JodaArgumentFactory;
-import com.hello.suripu.core.db.util.PostgresIntegerArrayArgumentFactory;
-import com.hello.suripu.taimurain.cli.CreateDynamoDBTables;
 import com.hello.suripu.taimurain.configuration.TaimurainConfiguration;
 import com.hello.suripu.taimurain.db.NeuralNetDAO;
 import com.hello.suripu.taimurain.db.NeuralNetsFromS3;
+import com.hello.suripu.taimurain.resources.v1.NeuralNetResource;
 import org.joda.time.DateTimeZone;
-import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +20,7 @@ import java.net.InetSocketAddress;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import io.dropwizard.jdbi.DBIFactory;
-import io.dropwizard.jdbi.OptionalContainerFactory;
+
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -46,22 +39,11 @@ public class Taimurain extends Application<TaimurainConfiguration> {
     @Override
     public void initialize(Bootstrap<TaimurainConfiguration> bootstrap) {
         bootstrap.addBundle(new DBIExceptionsBundle());
-        bootstrap.addCommand(new CreateDynamoDBTables());
     }
 
     @Override
     public void run(final TaimurainConfiguration configuration, Environment environment) throws Exception {
 
-        final DBIFactory factory = new DBIFactory();
-        final DBI commonDB = factory.build(environment, configuration.getCommonDB(), "postgresql");
-
-        commonDB.registerArgumentFactory(new JodaArgumentFactory());
-        commonDB.registerContainerFactory(new OptionalContainerFactory());
-        commonDB.registerArgumentFactory(new PostgresIntegerArrayArgumentFactory());
-
-        final DeviceDAO deviceDAO = commonDB.onDemand(DeviceDAO.class);
-
-        final ImmutableMap<DynamoDBTableName, String> tableNames = configuration.dynamoDBConfiguration().tables();
 
         // Checks Environment first and then instance profile.
         final AWSCredentialsProvider awsCredentialsProvider = new DefaultAWSCredentialsProviderChain();
@@ -97,11 +79,11 @@ public class Taimurain extends Application<TaimurainConfiguration> {
         }
 
 
-
-          /* Neural net data DAOs */
+        /* Neural net data DAOs */
         final NeuralNetDAO neuralNetDAO = NeuralNetsFromS3.createFromConfigBucket(amazonS3,configuration.getNeuralNetConfiguration().getBucket(),configuration.getNeuralNetConfiguration().getKey());
+        final NeuralNetResource neuralNetResource = new NeuralNetResource(neuralNetDAO);
 
-
+        environment.jersey().register(neuralNetResource);
 
     }
 

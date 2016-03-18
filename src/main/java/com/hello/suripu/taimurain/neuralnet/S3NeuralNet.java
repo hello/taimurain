@@ -1,4 +1,4 @@
-package com.hello.suripu.taimurain.algtest;
+package com.hello.suripu.taimurain.neuralnet;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentialsProvider;

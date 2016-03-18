@@ -1,4 +1,4 @@
-package com.hello.suripu.taimurain.algtest;
+package com.hello.suripu.taimurain.neuralnet;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;

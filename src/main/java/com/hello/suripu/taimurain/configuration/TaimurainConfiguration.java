@@ -12,13 +12,7 @@ import javax.validation.constraints.NotNull;
 
 public class TaimurainConfiguration extends Configuration {
 
-    @Valid
-    @NotNull
-    @JsonProperty("common_db")
-    private DataSourceFactory commonDB = new DataSourceFactory();
-    public DataSourceFactory getCommonDB() {
-        return commonDB;
-    }
+
 
     @Valid
     @NotNull
@@ -43,13 +37,6 @@ public class TaimurainConfiguration extends Configuration {
         return graphite;
     }
 
-    @Valid
-    @NotNull
-    @JsonProperty("dynamodb")
-    private NewDynamoDBConfiguration dynamoDBConfiguration;
-    public NewDynamoDBConfiguration dynamoDBConfiguration(){
-        return dynamoDBConfiguration;
-    }
 
     @Valid
     @NotNull

@@ -1,4 +1,4 @@
-package com.hello.suripu.taimurain.algtest;
+package com.hello.suripu.taimurain.neuralnet;
 
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;

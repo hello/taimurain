@@ -1,4 +1,4 @@
-package com.hello.suripu.taimurain.algtest;
+package com.hello.suripu.taimurain.neuralnet;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
