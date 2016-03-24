@@ -62,8 +62,8 @@ public class NeuralNetResource  {
     }
 
     @POST
-    @Consumes(AdditionalMediaTypes.APPLICATION_PROTOBUF)
-    @Produces(AdditionalMediaTypes.APPLICATION_PROTOBUF)
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("/evaluate")
     public byte[] evaluateNet(final byte[] body) {
         try {
@@ -85,7 +85,19 @@ public class NeuralNetResource  {
 
             final double [][] y = evaluator.evaluate(x);
 
-            return InputOutputConversion.protobufFromMat(y).toByteArray();
+            final byte[] bytes = InputOutputConversion.protobufFromMat(y).toByteArray();
+
+            int nrows = 0;
+            int ncols = 0;
+            if (y.length > 0) {
+                nrows = y.length;
+                ncols = y[0].length;
+            }
+            
+            LOGGER.info("output was size {} x {} and {} bytes", nrows, ncols, bytes.length);
+
+
+            return bytes;
 
 
         }
