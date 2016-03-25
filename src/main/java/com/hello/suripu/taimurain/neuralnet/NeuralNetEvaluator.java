@@ -2,7 +2,9 @@ package com.hello.suripu.taimurain.neuralnet;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.hello.suripu.taimurain.exceptions.NeuralNetConfigurationException;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.layers.FeedForwardLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -62,15 +64,30 @@ public class NeuralNetEvaluator {
     *
     * */
 
-    public double [][] evaluate(final double [][] x) {
+    public double [][] evaluate(final double [][] input) throws NeuralNetConfigurationException {
         //Data: has shape [miniBatchSize,nIn,timeSeriesLength];
         //so we are of size [1,nIn,timeSeriesLength]
-        if (x.length == 0) {
+        if (input.length == 0) {
             return new double[0][0];
         }
 
-        final int N = x.length;
-        final int T = x[0].length;
+        //UGLY, but does the job
+        final int expectedNumberOfInputs = ((FeedForwardLayer)net.getLayerWiseConfigurations().getConf(0).getLayer()).getNIn();
+
+        final int dataInputVecSize = input.length;
+        final int T = input[0].length;
+
+        LOGGER.info("expected_num_inputs={}, actual_num_input{}, time_len={}",expectedNumberOfInputs,dataInputVecSize,T);
+
+        if (dataInputVecSize < expectedNumberOfInputs) {
+            throw new NeuralNetConfigurationException(String.format("excpected at least %d rows of data, and found %d instead.",expectedNumberOfInputs,dataInputVecSize));
+        }
+
+        final double [][] x = new double[expectedNumberOfInputs][0];
+
+        for (int iInput = 0; iInput < expectedNumberOfInputs; iInput++) {
+            x[iInput] = input[iInput];
+        }
 
 
         final INDArray primitiveDataAsInput = Nd4j.create(x);
