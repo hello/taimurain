@@ -4,5 +4,5 @@ port:5555
 host-ip:127.0.0.1
 ############################
 [s3]
-data-bucket:hello-timeline
+data-bucket:hello-neuralnet-models
 
