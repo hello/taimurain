@@ -6,6 +6,7 @@ from keras.models import model_from_json
 import neural_net_messages_pb2
 import models
 import proto_utils
+import json
 
 config_section_server = 'server'
 config_file_name = 'config.txt'
@@ -34,8 +35,12 @@ def list_routes():
 @app.route('/')
 def status():
     routes = 'ROUTES:\n'.join(list_routes()) + '\n'
-    nets = 'NEURAL_NETS:\n'.join(g_keras_models.keys()) + '\n'
-    return routes + nets
+    return routes
+
+@app.route('/v1/neuralnet/getavailable')
+def get_available_nets():
+    global g_keras_models
+    return json.dumps(g_keras_models.keys())
 
 @app.route('/v1/neuralnet/evaluate',methods=['POST'])
 def neural_net_v1():
