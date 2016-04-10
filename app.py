@@ -5,6 +5,7 @@ import logging
 from keras.models import model_from_json
 import neural_net_messages_pb2
 import models
+import proto_utils
 
 config_section_server = 'server'
 config_file_name = 'config.txt'
@@ -38,15 +39,33 @@ def status():
 
 @app.route('/v1/neuralnet/evaluate',methods=['POST'])
 def neural_net_v1():
+    global g_keras_models
+
     m = neural_net_messages_pb2.NeuralNetInput()
     m.ParseFromString(request.get_data())
-    print m.net_id
 
-    out = neural_net_messages_pb2.NeuralNetOutput()
+    if m.net_id not in g_keras_models.keys():
+        logging.warn('net_id=%s does not exist' % m.net_id)
+        return '',400
+
+    model = g_keras_models[m.net_id]
+
+    input_shape = model.inputs['input'].input_shape
+
+    x = proto_utils.input_to_numpy_mat(m)
+    xx = x.reshape((1,x.shape[0],x.shape[1])) #expects batch data, well a batch of one is still a batch
+    
+    p = model.predict({'input' : xx})
+
+    y = p['output'][0]
+
+    out = proto_utils.numpy_mat_to_output_proto(y)
     
     return out.SerializeToString(),200, {'Content-Type': 'application/octet-stream; charset=utf-8'}
 
 def main():
+    global g_keras_models
+
     config = ConfigParser()
 
     #read config file
@@ -61,6 +80,7 @@ def main():
     bucket = config.get(config_section_s3,bucket_key)
     g_keras_models = models.get_models_from_s3(bucket)
     logging.info('have %d models' % len(g_keras_models))
+    logging.info(','.join(g_keras_models.keys()))
 
     app.run(host=host,port=port)
     

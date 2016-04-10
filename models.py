@@ -16,6 +16,7 @@ def get_models_from_s3(bucket):
     bucket = conn.get_bucket(bucket)
     for key in bucket.list():
         name = key.name.encode('utf-8')
+        model_name = name.split('.')[0]
         if 'json' in name:
             logging.info('downloading %s/%s' % (bucket,name))
             value = bucket.get_key(name)
@@ -24,8 +25,8 @@ def get_models_from_s3(bucket):
                 values_name = name.replace('json','h5')
                 logging.info('downloading %s/%s' % (bucket,values_name))
                 model_values = bucket.get_key(values_name)
-                values[name] = values_name,model_values
-                configs[name] = model_config
+                values[model_name] = values_name,model_values
+                configs[model_name] = model_config
             except Exception:
                 logging.error('fail on %s' % name)
 
