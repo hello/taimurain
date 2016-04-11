@@ -1,2 +1,9 @@
-numpy==1.8.2
-theano=8.0.0
+NeuralNetEndpoint
+boto==2.38.0
+Flask==0.10.1
+h5py==2.5.0
+Keras==0.3.3
+numpy==1.10.4
+protobuf==2.6.1
+Theano==0.8.0
+
