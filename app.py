@@ -7,11 +7,14 @@ import neural_net_messages_pb2
 import models
 import proto_utils
 import json
+import urllib
+import sys
 
 config_section_server = 'server'
-config_file_name = 'config.txt'
+config_file_name = sys.argv[1]
 host_key = 'host-ip'
 port_key = 'port'
+debug_key = 'debug'
 
 config_section_s3 = 's3'
 bucket_key = 'data-bucket'
@@ -22,7 +25,6 @@ g_keras_models = {}
 app = Flask(__name__)
 
 def list_routes():
-    import urllib
 
     output = []
     for rule in app.url_map.iter_rules():
@@ -50,7 +52,7 @@ def neural_net_v1():
     m.ParseFromString(request.get_data())
 
     if m.net_id not in g_keras_models.keys():
-        logging.warn('net_id=%s does not exist' % m.net_id)
+        logging.warn('action=return_error reason=net_not_found net_id=%s' % m.net_id)
         return '',400
 
     model = g_keras_models[m.net_id]
@@ -78,14 +80,21 @@ def main():
     config.readfp(f)
     f.close()
 
-    logging.basicConfig(level=logging.INFO,format='%(levelname)s %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-
+    debug = config.get(config_section_server,debug_key)
     host = config.get(config_section_server,host_key)
     port = config.get(config_section_server,port_key)
     bucket = config.get(config_section_s3,bucket_key)
+
+    log_level = logging.INFO
+
+    if debug.upper() == 'TRUE':
+        log_level = logging.DEBUG
+        
+    logging.basicConfig(level=log_level,format='%(levelname)s %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
+    
     g_keras_models = models.get_models_from_s3(bucket)
-    logging.info('have %d models' % len(g_keras_models))
-    logging.info(','.join(g_keras_models.keys()))
+    logging.info('action=load_models_complete num_models=%d' % len(g_keras_models))
 
     app.run(host=host,port=port)
     

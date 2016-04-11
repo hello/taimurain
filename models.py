@@ -12,31 +12,29 @@ def get_models_from_s3(bucket):
     configs = {}
     values = {}
 
-    conn = S3Connection(os.getenv('AWS_ACCESS_KEY_ID'),os.getenv('AWS_SECRET_KEY'))
+    conn = S3Connection()
     bucket = conn.get_bucket(bucket)
     for key in bucket.list():
         name = key.name.encode('utf-8')
         model_name = name.split('.')[0]
         if 'json' in name:
-            logging.info('downloading %s/%s' % (bucket,name))
+            logging.info('action=download bucket=%s key=%s' % (bucket,name))
             value = bucket.get_key(name)
             model_config = value.get_contents_as_string()
             try:
                 values_name = name.replace('json','h5')
-                logging.info('downloading %s/%s' % (bucket,values_name))
+                logging.info('action=download bucket=%s key=%s' % (bucket,values_name))
                 model_values = bucket.get_key(values_name)
                 values[model_name] = values_name,model_values
                 configs[model_name] = model_config
-            except Exception:
-                logging.error('fail on %s' % name)
+            except Exception,e:
+                logging.error('bucket=%s key=%s error=\"%s\"' % (bucket,name,e))
 
     models = {}
     for key in configs:
-        logging.info('compiling model %s ...' % key)
+        logging.info('action=compiling model=%s ...' % key)
         models[key] = model_from_json(configs[key])            
-    logging.info('DONE COMPILING')
 
-    logging.info('LOADING WEIGHTS')
     for key in configs:
         vname,data = values[key]
         filename = vname + '.' + id_generator(16)
