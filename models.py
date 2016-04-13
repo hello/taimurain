@@ -32,7 +32,7 @@ def get_models_from_s3(bucket):
 
     models = {}
     for key in configs:
-        logging.info('action=compiling model=%s ...' % key)
+        logging.info('action=compiling model=%s' % key)
         models[key] = model_from_json(configs[key])            
 
     for key in configs:

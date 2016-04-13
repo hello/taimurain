@@ -5,7 +5,7 @@ import time
 
 m = neural_net_messages_pb2.NeuralNetInput()
 
-m.net_id = 'run006'
+m.net_id = 'SLEEP'
 
 for t in range(961):  
     d = m.mat.add()

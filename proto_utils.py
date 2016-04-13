@@ -19,7 +19,7 @@ def input_to_numpy_mat(input_proto):
     M = len(input_proto.mat)
 
     if M == 0:
-        return np.array([])
+        return None
 
     mat = []
     for j in range(M):

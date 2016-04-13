@@ -9,6 +9,7 @@ import proto_utils
 import json
 import urllib
 import sys
+import numpy as np
 
 config_section_server = 'server'
 config_file_name = sys.argv[1]
@@ -36,7 +37,7 @@ def list_routes():
 
 @app.route('/')
 def status():
-    routes = 'ROUTES:\n'.join(list_routes()) + '\n'
+    routes = '\n<br/>'.join(list_routes())
     return routes
 
 @app.route('/v1/neuralnet/getavailable')
@@ -49,7 +50,18 @@ def neural_net_v1():
     global g_keras_models
 
     m = neural_net_messages_pb2.NeuralNetInput()
-    m.ParseFromString(request.get_data())
+    
+    logging.info('action=post_v1_neuralnet_evaluate data-length=%d' % (len(request.data)))
+
+    m.ParseFromString(request.data)
+
+    x = proto_utils.input_to_numpy_mat(m)
+ 
+    if x == None:
+        logging.warn("action=return_error reason=no_data_in_input_matrix")
+        return '',400
+
+    logging.info('action=request_model_evaluation input-shape=(%d,%d) net_id=%s' % (x.shape[0],x.shape[1],m.net_id))
 
     if m.net_id not in g_keras_models.keys():
         logging.warn('action=return_error reason=net_not_found net_id=%s' % m.net_id)
@@ -57,14 +69,29 @@ def neural_net_v1():
 
     model = g_keras_models[m.net_id]
 
-    input_shape = model.inputs['input'].input_shape
+    expected_input_shape = model.inputs['input'].input_shape
 
-    x = proto_utils.input_to_numpy_mat(m)
+    #transpose for compatibility
+    is_transposed = False
+    if x.shape[0] == expected_input_shape[2] and x.shape[1] == expected_input_shape[1]:
+        logging.info("action=transposing_input_matrix")
+        x = x.transpose()
+        is_transposed = True
+
+    if x.shape[0] != expected_input_shape[1] or x.shape[1] != expected_input_shape[2]:
+        logging.warn('action=return_error reason=input_dims_do_not_match expected_dim=(%d,%d)' % (expected_input_shape[1],expected_input_shape[2]))
+        return '',400
+
     xx = x.reshape((1,x.shape[0],x.shape[1])) #expects batch data, well a batch of one is still a batch
     
     p = model.predict({'input' : xx})
 
     y = p['output'][0]
+
+    if is_transposed:
+        y = y.transpose()
+
+    logging.info('action=evaluted_neural_net output_shape=(%d,%d)' % (y.shape[0],y.shape[1]))
 
     out = proto_utils.numpy_mat_to_output_proto(y)
     
@@ -94,6 +121,7 @@ def main():
 
     
     g_keras_models = models.get_models_from_s3(bucket)
+
     logging.info('action=load_models_complete num_models=%d' % len(g_keras_models))
 
     app.run(host=host,port=port)
