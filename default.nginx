@@ -1,0 +1,50 @@
+#place as /etc/nginx/sites-enabled/default
+#service nginx restart
+#ta da.
+upstream taimurain {
+       server 127.0.0.1:5555;
+#       server 127.0.0.1:5556;
+}
+
+
+
+server {
+
+      access_log /var/log/nginx/suripu-taimurain-access.log;
+
+      keepalive_timeout 10;
+      proxy_read_timeout 200;
+      sendfile on;
+      tcp_nopush on;
+      tcp_nodelay on;
+      gzip on;
+      gzip_min_length 1000;
+      gzip_proxied any;
+      gzip_types text/plain text/css text/xml
+                 application/x-javascript application/xml
+                 application/atom+xml text/javascript;
+
+      # Only retry if there was a communication error, not a timeout
+      # on the Tornado server (to avoid propagating "queries of death"
+      # to all frontends)
+      #proxy_next_upstream error;
+
+      listen 5557;
+      server_name benjo.dev internal-taimurain-230356525.us-east-1.elb.amazonaws.com;
+
+      location @sorry {
+        return 418 "404";
+      }
+
+      error_page 404 500 @sorry;
+
+      location / {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Scheme $scheme;
+            proxy_intercept_errors on;
+            proxy_pass http://taimurain;
+        }
+}
