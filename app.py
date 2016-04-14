@@ -13,7 +13,6 @@ import numpy as np
 
 config_section_server = 'server'
 config_file_name = sys.argv[1]
-host_key = 'host-ip'
 port_key = 'port'
 debug_key = 'debug'
 
@@ -108,7 +107,6 @@ def main():
     f.close()
 
     debug = config.get(config_section_server,debug_key)
-    host = config.get(config_section_server,host_key)
     port = config.get(config_section_server,port_key)
     bucket = config.get(config_section_s3,bucket_key)
 
@@ -124,7 +122,7 @@ def main():
 
     logging.info('action=load_models_complete num_models=%d' % len(g_keras_models))
 
-    app.run(host=host,port=port)
+    app.run(port=port)
     
 
 if __name__ == '__main__':
