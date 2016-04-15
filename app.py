@@ -118,7 +118,7 @@ def main():
         log_level = logging.DEBUG
         
     logging.basicConfig(level=log_level,format='%(levelname)s %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    logging.info('gettings models from %s in location %s' % (source,location))
+    logging.info('action=get_models source=%s location=%s' % (source,location))
     if source == 's3':
         g_keras_models = models.get_models_from_s3(location)
     elif source == 'local':
