@@ -16,8 +16,9 @@ config_file_name = sys.argv[1]
 port_key = 'port'
 debug_key = 'debug'
 
-config_section_s3 = 's3'
-bucket_key = 'data-bucket'
+config_section_models = 'models'
+bucket_key = 'location'
+source_key = 'source'
 
 #yay global variables -- single threaded app, so no worries
 g_keras_models = {}
@@ -108,7 +109,8 @@ def main():
 
     debug = config.get(config_section_server,debug_key)
     port = config.get(config_section_server,port_key)
-    bucket = config.get(config_section_s3,bucket_key)
+    location = config.get(config_section_models,bucket_key)
+    source = config.get(config_section_models,source_key)
 
     log_level = logging.INFO
 
@@ -116,10 +118,15 @@ def main():
         log_level = logging.DEBUG
         
     logging.basicConfig(level=log_level,format='%(levelname)s %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-
-    
-    g_keras_models = models.get_models_from_s3(bucket)
-
+    logging.info('gettings models from %s in location %s' % (source,location))
+    if source == 's3':
+        g_keras_models = models.get_models_from_s3(location)
+    elif source == 'local':
+        g_keras_models = models.get_models_from_local(location)
+    else:
+        logging.error('SOURCE: %s IS INVALID.  MUST BE either \"s3\" or \"local\"' % source)
+        sys.exit(0)
+      
     logging.info('action=load_models_complete num_models=%d' % len(g_keras_models))
 
     app.run(port=port)

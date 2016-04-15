@@ -46,6 +46,23 @@ def get_models_from_s3(bucket):
         os.remove(filename)
 
     return models
+
+def get_models_from_local(path):
+    files = os.listdir(path)
+    config_files = [f for f in files if "json" in f]
+    models = {}
+
+
+    for fname in config_files:
+        with open(fname,'r') as f:
+            config = f.read()
+            key = fname.split(".")[0]
+            logging.info('action=compiling model=%s' % key)
+            models[key] = model_from_json(config)
+            models[key].load_weights(key + '.h5')
+
+    return models
+
         
 if __name__ == '__main__':
     get_models_from_s3('hello-neuralnet-models')
