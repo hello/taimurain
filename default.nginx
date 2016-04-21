@@ -2,8 +2,10 @@
 #service nginx restart
 #ta da.
 upstream taimurain {
-       server 127.0.0.1:5555;
-#       server 127.0.0.1:5556;
+       server 127.0.0.1:5551;
+       server 127.0.0.1:5552;
+       server 127.0.0.1:5553;
+       server 127.0.0.1:5554;
 }
 
 

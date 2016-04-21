@@ -10,10 +10,9 @@ import json
 import urllib
 import sys
 import numpy as np
+import argparse
 
 config_section_server = 'server'
-config_file_name = sys.argv[1]
-port_key = 'port'
 debug_key = 'debug'
 
 config_section_models = 'models'
@@ -100,6 +99,14 @@ def neural_net_v1():
 def main():
     global g_keras_models
 
+    parser = argparse.ArgumentParser(description='spawns a flask server that can evaluate neural nets')
+    parser.add_argument('-p','--port',type=int,required=True,help='port at which the server will listen')
+    parser.add_argument('-c','--config',type=str,required=True,help='specified config file')
+    args = parser.parse_args()
+
+    config_file_name = args.config
+    port = args.port
+
     config = ConfigParser()
 
     #read config file
@@ -108,7 +115,6 @@ def main():
     f.close()
 
     debug = config.get(config_section_server,debug_key)
-    port = config.get(config_section_server,port_key)
     location = config.get(config_section_models,bucket_key)
     source = config.get(config_section_models,source_key)
 
