@@ -11,4 +11,5 @@
 1. Make sure you have amazon credentials that have access to s3://hello-neuralnet-models
 2. sudo ./app.py -p PORT -c ./config.prod.ini
 
+NOTE: it's normal for the app to take three minutes to compile each model
 
