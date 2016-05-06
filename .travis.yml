@@ -12,6 +12,8 @@ virtualenv:
   system_site_packages: true
 sudo: required
 before_install:
+ - sudo apt-get update
+ - sudo apt-get install python-dev python-pip python-nose g++ libopenblas-dev liblapack-dev git libhdf5-serial-dev gfortran
  - pip install -U pip setuptools
  - sudo apt-get install -qq python-numpy python-scipy
 script:
