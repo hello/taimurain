@@ -1,16 +1,22 @@
 #!/usr/bin/python
-from flask import Flask, url_for, request
+
+import sys
+
+import argparse
 from ConfigParser import ConfigParser
+import json
 import logging
+import urllib
+
+
+import numpy as np
 from keras.models import model_from_json
+from flask import Flask, url_for, request
+
 import neural_net_messages_pb2
 import models
 import proto_utils
-import json
-import urllib
-import sys
-import numpy as np
-import argparse
+
 
 config_section_server = 'server'
 debug_key = 'debug'
@@ -24,9 +30,8 @@ port = 5551
 config = ConfigParser()
 
 # read config file
-f = open(config_file_name)
-config.readfp(f)
-f.close()
+with open(config_file_name) as f:
+    config.readfp(f)
 
 debug = config.get(config_section_server, debug_key)
 location = config.get(config_section_models, bucket_key)
