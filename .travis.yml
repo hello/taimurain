@@ -12,6 +12,7 @@ virtualenv:
   system_site_packages: true
 sudo: required
 before_install:
+ - pip install -U pip setuptools
  - sudo apt-get install -qq python-numpy python-scipy
 script:
 - export TEMP_DIR="/tmp/$APP_NAME"
@@ -48,6 +49,7 @@ deploy:
     branch: PRODUCTION
 branches:
   only:
+  - deploy
   - master
   - PRODUCTION
 notifications:
