@@ -48,7 +48,7 @@ deploy:
   region: us-east-1
   on:
     tags: false
-    branch: PRODUCTION
+    branch: deploy
 branches:
   only:
   - deploy
