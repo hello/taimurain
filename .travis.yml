@@ -1,15 +1,13 @@
 language: python
 python:
-  - "2.7"
+- '2.7'
 sudo: false
 env:
   global:
   - APP_NAME=taimurain
   - BUILD_NUMBER=0.1.$TRAVIS_BUILD_NUMBER
-  - secure:
-    IO2vXu7uyzMKkNu3KY+MBZBGx8zCtAZHOA1quMurmq4cVNzPka9L27Kz3Dk0bZ+RUAi0oBxs/spn4Nxq+Z/CY5slK6ntLy+ogVuY8zNRxZVhWP+bauXCrPD5yzeTMJfr2qd170IGyfLxBvgDGfc91KnDC2YQNrCKuMuvhkTUsnWGOdFBwYanfVkfuGeAlyzc6jQanO9d00KgFq6YZHXwrsMLjeHY8Yb3SBolEiOMXqKjOdvY7p5fbris/9BhFYpbTqtR794ai7c3XuDhlv1tsG+8YHPJKwj4mBiinQoUciwcvpmlDLa1AShxveOUrWzNpiwQtLeHt4YREkvGhKi6QlBTPeCf00mXhpnZ279fYwNTrNLQqZOp2BPTmHEm4pE5DVvKWvHu6GdRMjWKTlBQ4AYMFmhMQ+6wYNoWQBUlLX2NF7WnMkonyuw7jOoIjchmIn1M6w6gOFpsSFOeK+um7Ncjg+pnxI4LP2k16ncudPGwuI6XZa7CE+9nZwN1f3fF6zM7qqWO+8jaLFIpiOoQIsIqZ4Qirafy071l8bQc88G480Ok/FqH6+09WWmWWdUYhroYjeLfZ5V4t4ptAxspbC8yLEDv8/nCJkvtn15imo7pwpBIEgnDlyMpSw/2sN8E6rIjxOnrjqYDPfmp7gSgfj3jZpxErf8fNL3YabFZ0to=
-  - secure:
-    szZFGxtgb8+1Hn3lXpL5e3aGinoqYikjfnjpA1dsKsLY/jtlorvvyt184QwZMjXAQkWmiKTXBFq7i8H4dUvLI3xZPnc9ohrIo9lbR1fVmKRBFKk9rGoYQ5f5qBErhCrz5yjR+HTr7D6XM4xvXPh6PK2waPz9xQht2OUQe1ZhNu/KZPkjDXGNYc/NEWL70VSoLrkBOerB1K8zQ7XzPGK8+9w5p+2HFpYO8EEKj1GI6dhvlIcm10dpf8+QQNQ1KolNMv4UqkLsTEKtVA5R6IU3P+EJvZZSyHR5Nm9vswRnfoR+ut/mKIPeBz+FFWGTjo3LOS+0tA4altKbrK/gLpzGKKMoYy4+xvpo0PLVv7bXVlty5fK1fvEm5C/DglCq3rEowb/RtVQo6luu0o4VtqHjvwDXLpgTqtXYYick57VDZ5EvumWGOsBFSbriWT+1lnxeZxkMLuzfyvH+K7PLePFVy+co6pk1NWPhegKRiw2YIbpN13av24QsYJDbuMorO6wHQnU/CosYy02PZ4oIBM+RzSUh7/UpjzgZTbnL4wv+U/f+sE9jBTm82Wa3JGVMDXxjjSM0SVXnh3oIr0uXv+BFHUwqWprKZjkeC8uuKCMKAmdqxMCKEZ5rgf0/KH4jkrNUt9AnDqVR7oaBx5poLpbwT6D1a+IPmQ7lqAVF3IvuaAA=
+  - secure: hU0uzAI+VvPif7JgM7/4Qo3DDEA81/IB8u6Y9WP7TLQs7PT2Gv57q4yaM9ds2gTTKdvoYpacbYE08Ddpu8iVBBbLdZ3oEKocpQwWX5bkRBZ9YMpcs6MQNOW41a/mlikGz7S7XOBYXy0+jwQcvlTst7IcOHDNswBeIjtfC42wyEneT6P15Mpyxqxxkd8S6FctflynE+OgB6vxOs60lyNZDkoFk/87NgLYjRd9VkpA47/Hr2KxrhdCXLoYNweb/DE0HzssBbLcBExlLMrAmvNVoUFluBw5prdnN/nq4TiMmGzbdHqbDx7DT3/wZSWpB+okQg/CuYmgrk8zY0OIxgpBDCv3nDQSE5to9kW42AWfltPOiMpZkIVScJ2Bj+2pVZtmHtedCQrwCbQnNP04Wal90EmIz+L+EISqXRWyqk/UQYG8zlG4AQORgDPMwXF5+4anttoo8yO67ri8vQg88g5ghTAsLwGRZ6FEVMud5ZkT7Aj+QFvSCS/9ewhhvYFrs0w/FnJU03ga02e/lGjHZFBY1C2b9i5ECJRs1XJ3k2eS+lMBw4lHv1ywV+kZgT9j34CFG5YYRGwtQFkwAwOMsflQyjw11LwDdCyQXSD3vbBjK5F6Dlr6M3prX1gthiflZRY9lZjO3uHNmX/dM+mXAvVgRYme7Ues2SJ48ZytJgH2ymU=
+  secure: pvLkEYKGQ9B3iwjsXURQakqiK/9AWkFvSY2sYHS2fvkDsRvd2mcoQOonMZCccIHGVRBq+g9wgUyeV+FrDH+445kSoWCRYFbsc3n1Rrfnz3VqHzVgBEIJfb4RYy7zgNIJXP/J8oTeeC/zm8nTzpJa2lUlBG1zay0oDZwtpJdOgPKEk9R6mqV7xy/iDJwYehR36tJYKZZmOS4NRWb8+VFELmhd2HEGgJnti9xNb4XHrRn4wk1V8NdFA9SCAD1ohqMqiPaZJhvIaMOpWGwrbauPVvBtmghdbYn/Nj/Pw1ycAeTgjow+8vJH5eLtvB8ftyYQJo9oy07/KJQHZg7r4L7S5X8n7+FUemdRkcul/VU84cqhguXi5VWx9wh2gE8knC6c6iyI94I7BwKPONSYrco8l75vzbEnqC2pPHnx/P7vBnafyK1Tdv541Tz9DBF4Tf9zRhyPSoBFA5ThzWVKXaVlrKHrO8Io79P0sj4Qk6uYJd+2pjHeOiDfNOWtBNT5uRLfQHYhqe1vTgIF0c6Hu+eiyZ1yUutMWIBJPB7hRjI9JeU73BqVXjR0pN6LIGuzGXUq6gvdAwHz1SEJ8a535100LOZk6dTSjOG0HENS4xXKbi4UKhV+IpAM50fgWwgWyM5uzoND2pPND5y6ThhNYez+dAxY2v2yZGKDT1A4ac6iH4g=
 script:
 - export TEMP_DIR="/tmp/$APP_NAME"
 - mkdir -p $TEMP_DIR/opt/hello
@@ -23,20 +21,18 @@ script:
 before_deploy:
 - gem install fpm
 - cp *.py $TEMP_DIR/opt/hello/.
-- fpm --force -s dir -C $TEMP_DIR -t deb --name "$APP_NAME" --version
-  $BUILD_NUMBER
+- fpm --force -s dir -C $TEMP_DIR -t deb --name "$APP_NAME" --version $BUILD_NUMBER
 - cp ${APP_NAME}_${BUILD_NUMBER}_amd64.deb configs/
 after_deploy:
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
 - export GIT_TAG=$APP_NAME-$TRAVIS_BRANCH-$BUILD_NUMBER
-- git tag $GIT_TAG -a -m "Generated tag from TravisCI build
-  $TRAVIS_BUILD_NUMBER"
+- git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
 - git push --quiet git@github.com:hello/taimurain.git --tags
 deploy:
 - provider: s3
-  access_key_id: $CI_DEPLOY_USERNAME
-  secret_access_key: $CI_DEPLOY_PASSWORD
+  access_key_id: "$CI_DEPLOY_USERNAME"
+  secret_access_key: "$CI_DEPLOY_PASSWORD"
   bucket: hello-deploy
   skip_cleanup: true
   local_dir: configs
@@ -52,4 +48,3 @@ branches:
 notifications:
   email:
   - kingshy+travis-taimurain@sayhello.com
-
