@@ -25,7 +25,7 @@ config_section_models = 'models'
 bucket_key = 'location'
 source_key = 'source'
 
-config_file_name = "./config.prod.ini"
+config_file_name = "./configs/config.prod.ini"
 port = 5551
 config = ConfigParser()
 
