@@ -47,10 +47,9 @@ deploy:
   region: us-east-1
   on:
     tags: false
-    branch: deploy
+    branch: PRODUCTION
 branches:
   only:
-  - deploy
   - master
   - PRODUCTION
 notifications:
