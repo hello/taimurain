@@ -52,6 +52,7 @@ branches:
   only:
   - master
   - PRODUCTION
+  - deploy
 notifications:
   email:
   - kingshy+travis-taimurain@sayhello.com
