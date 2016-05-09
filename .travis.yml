@@ -20,10 +20,10 @@ script:
 - mkdir -p $TEMP_DIR/opt/hello
 - mkdir -p $TEMP_DIR/etc/hello
 - mkdir -p $TEMP_DIR/etc/init/
-- mkdir -p $TEMP_DIR/etc/deploy/
+- mkdir -p $TEMP_DIR/etc/nginx/conf.d
 - mkdir deb-pkg
 - cp init/*.conf $TEMP_DIR/etc/init
-- cp deploy/*.conf $TEMP_DIR/etc/deploy
+- cp deploy/*.conf $TEMP_DIR/etc/nginx/conf.d
 - cp configs/*.ini $TEMP_DIR/etc/hello
 before_deploy:
 - gem install fpm
@@ -47,7 +47,7 @@ deploy:
   region: us-east-1
   on:
     tags: false
-    branch: PRODUCTION
+    branch: deploy
 branches:
   only:
   - master
