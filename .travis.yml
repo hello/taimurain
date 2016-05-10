@@ -51,12 +51,11 @@ deploy:
   region: us-east-1
   on:
     tags: false
-    branch: deploy
+    branch: PRODUCTION
 branches:
   only:
   - master
   - PRODUCTION
-  - deploy
 notifications:
   email:
   - kingshy+travis-taimurain@sayhello.com
