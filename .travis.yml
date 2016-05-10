@@ -18,6 +18,7 @@ before_install:
 script:
 - export TEMP_DIR="/tmp/$APP_NAME"
 - mkdir -p $TEMP_DIR/opt/hello
+- mkdir -p $TEMP_DIR/opt/hello/configs
 - mkdir -p $TEMP_DIR/etc/hello
 - mkdir -p $TEMP_DIR/etc/init
 - mkdir -p $TEMP_DIR/etc/papertrail
@@ -26,6 +27,7 @@ script:
 - cp init/*.conf $TEMP_DIR/etc/init
 - cp deploy/*.conf $TEMP_DIR/etc/nginx/conf.d
 - cp configs/taimurain_uwsgi.ini $TEMP_DIR/etc/hello
+- cp configs/configs.prod.ini $TEMP_DIR/opt/hello/configs
 - cp configs/taimurain_logs.yml $TEMP_DIR/etc/papertrail
 before_deploy:
 - gem install fpm

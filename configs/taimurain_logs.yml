@@ -3,5 +3,5 @@ files:
   - /var/log/nginx/suripu-taimurain-access.log
 destination:
   host: logs2.papertrailapp.com
-  port: 11366   # NOTE: change to your Papertrail port
+  port: 11366
   protocol: tls
