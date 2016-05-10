@@ -18,16 +18,20 @@ before_install:
 script:
 - export TEMP_DIR="/tmp/$APP_NAME"
 - mkdir -p $TEMP_DIR/opt/hello
+- mkdir -p $TEMP_DIR/opt/hello/configs
 - mkdir -p $TEMP_DIR/etc/hello
-- mkdir -p $TEMP_DIR/etc/init/
-- mkdir -p $TEMP_DIR/etc/deploy/
+- mkdir -p $TEMP_DIR/etc/init
+- mkdir -p $TEMP_DIR/etc/papertrail
+- mkdir -p $TEMP_DIR/etc/nginx/conf.d
 - mkdir deb-pkg
 - cp init/*.conf $TEMP_DIR/etc/init
-- cp deploy/*.conf $TEMP_DIR/etc/deploy
-- cp configs/*.ini $TEMP_DIR/etc/hello
+- cp deploy/*.conf $TEMP_DIR/etc/nginx/conf.d
+- cp configs/taimurain_uwsgi.ini $TEMP_DIR/etc/hello
+- cp configs/taimurain_logs.yml $TEMP_DIR/etc/papertrail
 before_deploy:
 - gem install fpm
 - cp *.py $TEMP_DIR/opt/hello/.
+- cp configs/config.prod.ini $TEMP_DIR/opt/hello/configs/.
 - fpm --force -s dir -C $TEMP_DIR -t deb --name "$APP_NAME" --version $BUILD_NUMBER
 - cp ${APP_NAME}_${BUILD_NUMBER}_amd64.deb configs/
 after_deploy:

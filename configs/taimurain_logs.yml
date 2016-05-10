@@ -1,0 +1,7 @@
+files:
+  - /var/log/taimurain_uwsgi.log
+  - /var/log/nginx/suripu-taimurain-access.log
+destination:
+  host: logs2.papertrailapp.com
+  port: 11366
+  protocol: tls
