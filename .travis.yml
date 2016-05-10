@@ -31,7 +31,7 @@ script:
 before_deploy:
 - gem install fpm
 - cp *.py $TEMP_DIR/opt/hello/.
-- cp configs/configs.prod.ini $TEMP_DIR/opt/hello/configs/.
+- cp configs/config.prod.ini $TEMP_DIR/opt/hello/configs/.
 - fpm --force -s dir -C $TEMP_DIR -t deb --name "$APP_NAME" --version $BUILD_NUMBER
 - cp ${APP_NAME}_${BUILD_NUMBER}_amd64.deb configs/
 after_deploy:
