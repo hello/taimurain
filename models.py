@@ -8,7 +8,7 @@ import random
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def get_models_from_s3(bucket):
+def get_models_from_s3(bucket,folder):
     configs = {}
     values = {}
 
@@ -16,7 +16,11 @@ def get_models_from_s3(bucket):
     bucket = conn.get_bucket(bucket)
     for key in bucket.list():
         name = key.name.encode('utf-8')
-        model_name = name.split('.')[0]
+        if (folder + '/') not in name or (folder + '/') == name:
+            continue
+
+        print name
+        model_name = name.split('.')[0].split('/')[-1]
         if 'json' in name:
             logging.info('action=download bucket=%s key=%s' % (bucket,name))
             value = bucket.get_key(name)
@@ -37,6 +41,7 @@ def get_models_from_s3(bucket):
 
     for key in configs:
         vname,data = values[key]
+        vname = vname.split('/')[-1]
         filename = vname + '.' + id_generator(16)
         with open(filename,'w') as f:
             #hacky as fuck
@@ -65,4 +70,4 @@ def get_models_from_local(path):
 
         
 if __name__ == '__main__':
-    get_models_from_s3('hello-neuralnet-models')
+    get_models_from_s3('hello-neuralnet-models-keras-v1p1','version001')
