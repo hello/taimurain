@@ -4,11 +4,12 @@ from keras.models import model_from_json
 import logging
 import string
 import random
+import numpy as np
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def get_models_from_s3(bucket):
+def get_models_from_s3(bucket,folder):
     configs = {}
     values = {}
 
@@ -16,7 +17,11 @@ def get_models_from_s3(bucket):
     bucket = conn.get_bucket(bucket)
     for key in bucket.list():
         name = key.name.encode('utf-8')
-        model_name = name.split('.')[0]
+        if (folder + '/') not in name or (folder + '/') == name:
+            continue
+
+        print name
+        model_name = name.split('.')[0].split('/')[-1]
         if 'json' in name:
             logging.info('action=download bucket=%s key=%s' % (bucket,name))
             value = bucket.get_key(name)
@@ -33,10 +38,25 @@ def get_models_from_s3(bucket):
     models = {}
     for key in configs:
         logging.info('action=compiling model=%s' % key)
-        models[key] = model_from_json(configs[key])            
+
+        try:
+            model = model_from_json(configs[key])
+        except Exception:
+            logging.error('error=failed-to-compile-model model=%s' % key)
+            continue
+
+        #evaluate model to so lazy instantiation doesn't cost us latency later
+        #this may only work for bidirectional nets
+        try:
+            model.predict(np.zeros((1,model.input_shape[1],model.input_shape[2]))) 
+        except Exception:
+            logging.info('action=lazy-prediction-failed-probably-because-shape-is-wrong')
+            
+        models[key] = model           
 
     for key in configs:
         vname,data = values[key]
+        vname = vname.split('/')[-1]
         filename = vname + '.' + id_generator(16)
         with open(filename,'w') as f:
             #hacky as fuck
@@ -65,4 +85,4 @@ def get_models_from_local(path):
 
         
 if __name__ == '__main__':
-    get_models_from_s3('hello-neuralnet-models')
+    get_models_from_s3('hello-neuralnet-models-keras-v1p1','version001')

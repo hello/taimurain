@@ -22,7 +22,8 @@ config_section_server = 'server'
 debug_key = 'debug'
 
 config_section_models = 'models'
-bucket_key = 'location'
+bucket_key = 'bucket'
+folder_key = 'folder'
 source_key = 'source'
 
 config_file_name = "./configs/config.prod.ini"
@@ -36,6 +37,8 @@ with open(config_file_name) as f:
 debug = config.get(config_section_server, debug_key)
 location = config.get(config_section_models, bucket_key)
 source = config.get(config_section_models, source_key)
+folder = config.get(config_section_models,folder_key)
+
 
 log_level = logging.INFO
 if debug.upper() == 'TRUE':
@@ -50,7 +53,7 @@ logging.basicConfig(level=log_level,
 
 logging.info('action=get_models source=%s location=%s' % (source, location))
 if source == 's3':
-    g_keras_models = models.get_models_from_s3(location)
+    g_keras_models = models.get_models_from_s3(location,folder)
 elif source == 'local':
     g_keras_models = models.get_models_from_local(location)
 else:
@@ -104,7 +107,10 @@ def neural_net_v1():
 
     model = g_keras_models[m.net_id]
 
-    expected_input_shape = model.inputs['input'].input_shape
+    expected_input_shape = model.input_shape
+    if len(expected_input_shape) == 3:
+        if expected_input_shape[0] > 1:
+            expected_input_shape = (1,expected_input_shape[1],expected_input_shape[2])
 
     #transpose for compatibility
     is_transposed = False
@@ -120,9 +126,9 @@ def neural_net_v1():
 
     xx = x.reshape((1, x.shape[0], x.shape[1])) #expects batch data, well a batch of one is still a batch
     
-    p = model.predict({'input' : xx})
+    p = model.predict(xx)
 
-    y = p['output'][0]
+    y = p[0]
 
     if is_transposed:
         y = y.transpose()
@@ -153,6 +159,7 @@ def main():
 
     debug = config.get(config_section_server, debug_key)
     location = config.get(config_section_models, bucket_key)
+    folder = config.get(config_section_models,folder_key)
     source = config.get(config_section_models, source_key)
 
     log_level = logging.INFO
@@ -166,7 +173,7 @@ def main():
 
     logging.info('action=get_models source=%s location=%s' % (source, location))
     if source == 's3':
-        g_keras_models = models.get_models_from_s3(location)
+        g_keras_models = models.get_models_from_s3(location,folder)
     elif source == 'local':
         g_keras_models = models.get_models_from_local(location)
     else:
