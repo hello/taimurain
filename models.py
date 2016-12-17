@@ -4,6 +4,7 @@ from keras.models import model_from_json
 import logging
 import string
 import random
+import numpy as np
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -37,7 +38,21 @@ def get_models_from_s3(bucket,folder):
     models = {}
     for key in configs:
         logging.info('action=compiling model=%s' % key)
-        models[key] = model_from_json(configs[key])            
+
+        try:
+            model = model_from_json(configs[key])
+        except Exception:
+            logging.error('error=failed-to-compile-model model=%s' % key)
+            continue
+
+        #evaluate model to so lazy instantiation doesn't cost us latency later
+        #this may only work for bidirectional nets
+        try:
+            model.predict(np.zeros((1,model.input_shape[1],model.input_shape[2]))) 
+        except Exception:
+            logging.info('action=lazy-prediction-failed-probably-because-shape-is-wrong')
+            
+        models[key] = model           
 
     for key in configs:
         vname,data = values[key]
